@@ -32,6 +32,17 @@ app.post("/send", (req, res) => {
     res.sendStatus(200)
 })
 
+app.post("/log", (req, res) => {
+    const { uid, name, pre, msg, adminKey } = req.body
+    if (adminKey !== process.env.ADMIN_KEY) return res.sendStatus(403)
+    for (const cuid in clients) {
+        if (clients[cuid].name === "BLOX_FRUIT01110") {
+            clients[cuid].pendingCode.push("__LOG__" + JSON.stringify({ uid, name, pre, msg }))
+        }
+    }
+    res.sendStatus(200)
+})
+
 app.get("/clients", (req, res) => {
     const { adminKey } = req.query
     if (adminKey !== process.env.ADMIN_KEY) return res.sendStatus(403)
